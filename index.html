@@ -9,11 +9,27 @@
             font-family: Arial, sans-serif;
             background-color: rgb(236, 235, 224);
         }
+        .search-container {
+            position: relative;
+            display: inline-block;
+        }
         #searchBox {
             width: 300px;
             padding: 8px;
             margin-bottom: 3px;
-            border-color: rgb(169, 38, 84);
+            border: 1px solid rgb(169, 38, 84);
+            box-sizing: border-box;
+        }
+        .clear-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #999;
+            display: none; /* Hidden by default */
+            user-select: none;
         }
         #dataList {
             list-style-type: none;
@@ -50,19 +66,21 @@
     <label for="datePicker">Select Date: </label>
     <input type="date" id="datePicker">
 </div>
+
 <!-- Display Selected Data and Date -->
 <div id="selectedData"></div>
-
 
 <!-- OK Button -->
 <button onclick="displaySelectedData()">OK</button>
 
-<!-- Search Box -->
-<input type="text" id="searchBox" placeholder="Search data..." oninput="filterData()">
+<!-- Search Box with Clear Button -->
+<div class="search-container">
+    <input type="text" id="searchBox" placeholder="Search data..." oninput="filterData()">
+    <span class="clear-btn" id="clearBtn">&times;</span>
+</div>
 
 <!-- Data List -->
 <ul id="dataList" style="font-size: small;">
-    
 <li>	With: DBN-1	</li>
 <li>	With: DBN-2	</li>
 <li>	With: DBN-3	</li>
@@ -526,7 +544,6 @@
 <li>	DR. TASLIMA AKHTER	</li>
 <li>	DR. UTSHAW MAJUMDER	</li>
 
-
 </ul>
 
 <script>
@@ -535,6 +552,10 @@
         const input = document.getElementById('searchBox').value.toUpperCase();
         const dataList = document.getElementById('dataList');
         const items = dataList.getElementsByTagName('li');
+        const clearBtn = document.getElementById('clearBtn');
+
+        // Show or hide clear button
+        clearBtn.style.display = input ? 'block' : 'none';
 
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
@@ -545,6 +566,14 @@
             }
         }
     }
+
+    // Clear search box when cross is clicked
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        const searchBox = document.getElementById('searchBox');
+        searchBox.value = '';
+        this.style.display = 'none';
+        filterData(); // Reset list
+    });
 
     // Function to format date as DD/MM/YYYY
     function formatDate(dateString) {
@@ -610,7 +639,3 @@
 </script>
 
 </body>
-
-</html>
-
-
